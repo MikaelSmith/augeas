@@ -175,6 +175,10 @@
 #define ATTRIBUTE_RETURN_CHECK
 #endif                                   /* __GNUC__ */
 
+#ifndef HAVE_UINT
+typedef unsigned int uint;
+#endif
+
 #define ARRAY_CARDINALITY(array) (sizeof (array) / sizeof *(array))
 
 /* String equality tests, suggested by Jim Meyering. */

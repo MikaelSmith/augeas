@@ -92,7 +92,7 @@ AUGEAS_CFLAGS=-std=gnu99
 AC_SUBST(AUGEAS_CFLAGS)
 
 AUGEAS_CHECK_READLINE
-AC_CHECK_FUNCS([open_memstream uselocale])
+AC_CHECK_FUNCS([open_memstream uselocale uint])
 
 AC_MSG_CHECKING([how to pass version script to the linker ($LD)])
 VERSION_SCRIPT_FLAGS=none
