@@ -69,6 +69,7 @@ fnmatch
 getline
 getopt-gnu
 gitlog-to-changelog
+glob
 canonicalize-lgpl
 isblank
 locale
@@ -90,7 +91,7 @@ vasprintf
 #   put *.[ch] files in new gnulib/lib/ dir.
 
 $gnulib_tool                    \
-  --lgpl=2                      \
+  --lgpl                        \
   --with-tests                  \
   --m4-base=gnulib/m4           \
   --source-base=gnulib/lib      \
