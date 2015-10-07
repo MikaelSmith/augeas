@@ -57,12 +57,12 @@ struct info {
 
 struct span {
     struct string *filename;
-    uint label_start;
-    uint label_end;
-    uint value_start;
-    uint value_end;
-    uint span_start;
-    uint span_end;
+    uint32_t label_start;
+    uint32_t label_end;
+    uint32_t value_start;
+    uint32_t value_end;
+    uint32_t span_start;
+    uint32_t span_end;
 };
 
 char *format_info(struct info *info);
