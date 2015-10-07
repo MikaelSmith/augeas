@@ -67,19 +67,6 @@ char *history_file = NULL;
  * General utilities
  */
 
-/* Not static, since prototype is in internal.h */
-int xasprintf(char **strp, const char *format, ...) {
-  va_list args;
-  int result;
-
-  va_start (args, format);
-  result = vasprintf (strp, format, args);
-  va_end (args);
-  if (result < 0)
-      *strp = NULL;
-  return result;
-}
-
 static int child_count(const char *path) {
     char *pat = NULL;
     int r;
