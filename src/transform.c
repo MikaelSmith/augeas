@@ -893,6 +893,7 @@ static int transfer_file_attrs(FILE *from, FILE *to,
         }
     }
 
+#ifndef _WIN32
     if (fchown(to_fd, st.st_uid, st.st_gid) < 0) {
         *err_status = "replace_chown";
         return -1;
@@ -901,6 +902,7 @@ static int transfer_file_attrs(FILE *from, FILE *to,
         *err_status = "replace_chmod";
         return -1;
     }
+#endif
     if (selinux_enabled && con != NULL) {
         if (fsetfilecon(to_fd, con) < 0 && errno != ENOTSUP) {
             *err_status = "replace_setfilecon";
@@ -981,10 +983,12 @@ static int clone_file(const char *from, const char *to,
         *err_status = "clone_flush";
         goto done;
     }
+#ifndef _WIN32
     if (fsync(fileno(to_fp)) < 0) {
         *err_status = "clone_sync";
         goto done;
     }
+#endif
     result = 0;
  done:
     if (from_fp != NULL)
@@ -1174,10 +1178,12 @@ int transform_save(struct augeas *aug, struct tree *xfm,
         mode_t curumsk = umask(022);
         umask(curumsk);
 
+#ifndef _WIN32
         if (fchmod(fileno(fp), 0666 & ~curumsk) < 0) {
             err_status = "create_chmod";
             return -1;
         }
+#endif
     }
 
     if (tree != NULL)
@@ -1193,10 +1199,12 @@ int transform_save(struct augeas *aug, struct tree *xfm,
         goto done;
     }
 
+#ifndef _WIN32
     if (fsync(fileno(fp)) < 0) {
         err_status = "sync_augtemp";
         goto done;
     }
+#endif
 
     if (fclose(fp) != 0) {
         err_status = "close_augtemp";
