@@ -21,12 +21,12 @@
  */
 
 #include <config.h>
-#include <argz.h>
-#include <getopt.h>
 
 #include "list.h"
 #include "syntax.h"
 #include "augeas.h"
+#include <argz.h>
+#include <getopt.h>
 #include <locale.h>
 
 const char *progname;
