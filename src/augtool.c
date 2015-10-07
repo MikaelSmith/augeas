@@ -20,6 +20,13 @@
  * Author: David Lutterkort <dlutter@redhat.com>
  */
 
+#ifndef _WIN32
+#include <pwd.h>
+#else
+#include <windows.h>
+#include <Shlobj.h>
+#endif
+
 #include <config.h>
 #include "augeas.h"
 #include "internal.h"
@@ -35,7 +42,6 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <pwd.h>
 #include <stdarg.h>
 
 /* Global variables */
@@ -211,9 +217,21 @@ static char **readline_completion(const char *text, int start,
     return NULL;
 }
 
-static char *get_home_dir(uid_t uid) {
+static char *get_home_dir() {
     char *strbuf;
     char *result;
+
+#ifdef _WIN32
+    size_t strbuflen = MAX_PATH;
+    if (ALLOC_N(strbuf, strbuflen) < 0)
+        return NULL;
+
+    if (FAILED(SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, 0, strbuf))) {
+        strcpy(strbuf, "C:/");
+    }
+    result = strdup(strbuf);
+#else
+    uid_t uid = getuid();
     struct passwd pwbuf;
     struct passwd *pw = NULL;
     long val = sysconf(_SC_GETPW_R_SIZE_MAX);
@@ -231,6 +249,7 @@ static char *get_home_dir(uid_t uid) {
     }
 
     result = strdup(pw->pw_dir);
+#endif
 
     free(strbuf);
 
@@ -243,7 +262,7 @@ static void readline_init(void) {
     rl_completion_entry_function = readline_path_generator;
 
     /* Set up persistent history */
-    char *home_dir = get_home_dir(getuid());
+    char *home_dir = get_home_dir();
     char *history_dir = NULL;
 
     if (home_dir == NULL)
