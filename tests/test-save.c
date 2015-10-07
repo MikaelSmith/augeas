@@ -77,10 +77,12 @@ static void teardown(ATTRIBUTE_UNUSED CuTest *tc) {
 }
 
 static void testRemoveNoPermission(CuTest *tc) {
+#ifndef _WIN32
     if (getuid() == 0) {
         puts("pending (testRemoveNoPermission): can't test permissions under root account");
         return;
     }
+#endif
 
     int r;
     const char *errmsg;

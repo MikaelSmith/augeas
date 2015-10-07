@@ -531,10 +531,12 @@ static void testParseErrorReported(CuTest *tc) {
 
 /* Test failed file opening is reported, e.g. EACCES */
 static void testPermsErrorReported(CuTest *tc) {
+#ifndef _WIN32
     if (getuid() == 0) {
         puts("pending (testPermsErrorReported): can't test permissions under root account");
         return;
     }
+#endif
 
     augeas *aug = NULL;
     int r;
