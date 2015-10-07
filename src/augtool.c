@@ -446,14 +446,29 @@ static void sigint_handler(ATTRIBUTE_UNUSED int signum) {
     rl_forced_update_display();
 }
 
+#ifdef _WIN32
+BOOL ctrl_handler(DWORD fdwCtrlType)
+{
+    if (fdwCtrlType == CTRL_C_EVENT) {
+        sigint_handler(fdwCtrlType);
+        return TRUE;
+    }
+    return FALSE;
+}
+#endif
+
 static void install_signal_handlers(void) {
     // On Ctrl-C, cancel the current line (rather than exit the program).
+#ifdef _WIN32
+    SetConsoleCtrlHandler((PHANDLER_ROUTINE)ctrl_handler, TRUE);
+#else
     struct sigaction sigint_action;
     MEMZERO(&sigint_action, 1);
     sigint_action.sa_handler = sigint_handler;
     sigemptyset(&sigint_action.sa_mask);
     sigint_action.sa_flags = 0;
     sigaction(SIGINT, &sigint_action, NULL);
+#endif
 }
 
 static int main_loop(void) {
