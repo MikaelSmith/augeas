@@ -36,6 +36,7 @@ src/lexer.[ch]
 src/augtool
 src/augparse
 src/callgrind.*
+src/*.exe
 tests/fatest
 tests/leak
 tests/lens-*.sh
@@ -46,6 +47,7 @@ tests/test-perf
 tests/test-run
 tests/test-save
 tests/*.trs
+tests/*.exe
 *.aux
 *.dvi
 *.log
@@ -54,4 +56,5 @@ man/*.1
 doc/naturaldocs/output
 doc/naturaldocs/conf/*/Data/*.nd
 examples/fadot
+examples/*.exe
 .settings
