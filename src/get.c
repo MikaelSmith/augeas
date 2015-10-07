@@ -1237,6 +1237,13 @@ static void parse_combine(struct rec_state *rec_state,
     return;
 }
 
+#ifdef _WIN32
+    #define SIZE_T_SYM "%Id"
+#else
+    #define SIZE_T_SYM "%zd"
+#endif
+;
+
 static void visit_exit(struct lens *lens,
                        ATTRIBUTE_UNUSED size_t start,
                        ATTRIBUTE_UNUSED size_t end,
@@ -1290,7 +1297,7 @@ static void visit_exit(struct lens *lens,
             struct frame *fr = nth_frame(rec_state, i);
             BUG_ON(lens->children[i] != fr->lens,
                     lens->info,
-             "Unexpected lens in concat %zd..%zd\n  Expected: %s\n  Actual: %s",
+             "Unexpected lens in concat " SIZE_T_SYM ".." SIZE_T_SYM "\n  Expected: %s\n  Actual: %s",
                     start, end,
                     format_lens(lens->children[i]),
                     format_lens(fr->lens));

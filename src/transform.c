@@ -377,6 +377,14 @@ static struct tree *err_lens_entry(struct augeas *aug, struct tree *where,
  * the tree where the lens application happened. When STATUS is NULL, just
  * clear any error associated with FILENAME in the tree.
  */
+static const char SIZE_T_SYM[] =
+#ifdef _WIN32
+    "%Id"
+#else
+    "%zd"
+#endif
+;
+
 static int store_error(struct augeas *aug,
                        const char *filename, const char *path,
                        const char *status, int errnum,
@@ -411,8 +419,8 @@ static int store_error(struct augeas *aug,
                 err_set(aug, err_info, s_pos, "%d", err->pos);
                 if (text != NULL) {
                     calc_line_ofs(text, err->pos, &line, &ofs);
-                    err_set(aug, err_info, s_line, "%zd", line);
-                    err_set(aug, err_info, s_char, "%zd", ofs);
+                    err_set(aug, err_info, s_line, SIZE_T_SYM, line);
+                    err_set(aug, err_info, s_char, SIZE_T_SYM, ofs);
                 }
             }
             if (err->path != NULL) {
